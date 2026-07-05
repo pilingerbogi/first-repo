@@ -1,0 +1,28 @@
+#include <Servo.h>
+const int POT_PIN = A0;
+const int SERVO_PIN = 9;
+const int TEMP_THRESHOLD = 500; //efelett forró a gép
+
+Servo myServo;
+
+void setup() {
+ Serial.begin(9600);
+ myServo.attach(SERVO_PIN);
+ myServo.write(0);
+}
+
+void loop() {
+   int rawTemp = analogRead(POT_PIN);
+   Serial.print("aktualis homerseklet erteke:");
+   Serial.println(rawTemp);
+
+   if(rawTemp > TEMP_THRESHOLD)
+   {
+    int angle = map(rawTemp, TEMP_THRESHOLD, 1023, 0, 180);
+    myServo.write(angle);
+   }
+   else{
+    myServo.write(0);
+   }
+   delay(100);
+}
